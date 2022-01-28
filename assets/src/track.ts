@@ -3,7 +3,9 @@ import { Vec2 } from "cc";
 export type AdjacencyList = number[][];
 
 export interface ITrackState {
+    /** 经过的节点 */
     visited: number[];
+    /** 与最后一个节点的距离 */
     offset: number;
 }
 
@@ -34,6 +36,10 @@ export function toPosition(index2position: (index: number) => Vec2, state: ITrac
     return posCur.subtract(posNex).normalize().multiplyScalar(-offset).add(posNex);
 }
 
+/**
+ * 要让目标沿着轨道走，根据touch与目标的位置产生的向量在轨道上的投影，就是目标要去的位置。
+ * 在分岔路口时，把向量分别投影到各个分叉轨道，我们姑且认为投影最长的就是要去的位置。
+*/
 export function go(al: AdjacencyList, index2position: (index: number) => Vec2, state: ITrackState, touch: Vec2): ITrackState {
     let { visited, offset } = state;
 
